@@ -167,21 +167,22 @@ jQuery(document).ready(function (jQuery) {
     }
   });
 
-  jQuery("#filter_item").change(function () {
-    var filterValue = jQuery(this).val();
-    var row = jQuery(".filter_type_cate_val");
+  // jQuery("#filter_item").change(function () {
+  //   var filterValue = jQuery(this).val();
+  //   var row = jQuery(".filter_type_cate_val");
 
-    row.hide();
-    row.each(function (i, el) {
-      if (jQuery(el).attr("data-type") == filterValue) {
-        jQuery(el).show();
-      }
-    });
+  //   row.hide();
+  //   row.each(function (i, el) {
+  //     if (jQuery(el).attr("data-type") == filterValue) {
+  //       jQuery(el).show();
+  //     }
+  //   });
 
-    if ("all" == filterValue) {
-      row.show();
-    }
-  });
+  //   if ("all" == filterValue) {
+  //     row.show();
+  //   }
+  //   console.log(filterValue);
+  // });
 
   jQuery("#reset_filter").click(function () {
     var filterValue = jQuery(this).val();
@@ -1996,6 +1997,7 @@ function load_data(ajax_search = "", page = 1) {
 
         var data_s = data.slice(0, -1);
         var json = JSON.parse(data_s);
+        console.log(json);
         var here_install_button = "";
         var featured_button = "";
 
@@ -2183,7 +2185,7 @@ function load_data(ajax_search = "", page = 1) {
                     '<a data-id="' +
                     f.unique_rand_md5 +
                     '"  href="themes.php?theme=' +
-                    f.new_generated_slug +
+                    f.preview +
                     '" target="_blank" class="btn ' +
                     disable_the_button +
                     ' btn-sm btn-block card-btn"><i class="fas fa-eye"></i>Sales Page</a>';
@@ -2219,7 +2221,7 @@ function load_data(ajax_search = "", page = 1) {
               if (f.type_slug != "wordpress-requests") {
                 here_details_button =
                   '<div class="col-6 mt-1 mb-1"><a target="_blank" rel="noreferrer" style="font-size:12.6px;" href="' +
-                  f.wishurl +
+                  f.preview +
                   '" class="btn btn-sm btn-block card-btn"> <i class="fas fa-eye"></i> Sales Page </a> </div>';
               }
 
@@ -2246,7 +2248,7 @@ function load_data(ajax_search = "", page = 1) {
                   f.new_generated_slug +
                   '"data-generated-name="' +
                   f.title +
-                  '" href="#" onclick="grab_product_report_link(this);" class="btn ' + ' btn-sm btn-block card-btn '+disable_the_button+'"><i class="fas fa-flag"></i> Report Item </button>  </div>';
+                  '" href="#" onclick="grab_product_report_link(this);" class="btn ' + ' btn-sm btn-block card-btn "><i class="fas fa-flag"></i> Report Item </button>  </div>';
                    
 
 
@@ -2294,6 +2296,19 @@ function load_data(ajax_search = "", page = 1) {
                 }
 
 
+
+
+                here_download_content_button =
+                  '<div class="col-12 mt-1"> <button id="optiondc" data-id="' +
+                  f.unique_rand_md5 +
+                  '" data-itemname="' +
+                  f.title +
+                  '" href="#" grab_dc_product_hash onclick="grab_dc_product_dcontents(this);" class="btn ' +
+                  disable_the_button +
+                  ' btn-sm btn-block card-btn"> <i class="fas fa-download"></i> Additional Content </button></div>';
+
+
+
               var summary = f.summary;
 
               if (summary.length > 99) {
@@ -2307,15 +2322,19 @@ function load_data(ajax_search = "", page = 1) {
               } else {
                 var json22 = JSON.parse(f.membershipallowance);
                 var values = Object.values(json22);
+                let dl_linkxyzzu = '#';
+                if(show_title_img_fv_link != 0){
+                  dl_linkxyzzu = 'https://community.festingervault.com/t/gold-silver-and-bronze-downloads/35448';
+                }
                 $.each(values, function(index, value) {
                     if(value == 'bronze'){
-                      allowenceImage += "<img style='height:20px; float:right;' src='https://festingervault.com/wp-content/uploads/2021/08/Orange-Quest-Medal.png' title='Bronze Download'> ";
+                      allowenceImage += "<a href='"+dl_linkxyzzu+"' target='_blank'><img style='height:20px; float:right;' src='https://festingervault.com/wp-content/uploads/2021/08/Orange-Quest-Medal.png' title='Bronze Download'> </a>";
                     }
                     if(value == 'gold'){
-                      allowenceImage += "<img style='height:20px; float:right;' src='https://festingervault.com/wp-content/uploads/2021/08/Gold-Quest-Medal.png' title='Gold Download'> ";
+                      allowenceImage += "<a href='"+dl_linkxyzzu+"' target='_blank'><img style='height:20px; float:right;' src='https://festingervault.com/wp-content/uploads/2021/08/Gold-Quest-Medal.png' title='Gold Download'> </a>";
                     }
                     if(value == 'silver'){
-                      allowenceImage += "<img style='height:20px; float:right;' src='https://festingervault.com/wp-content/uploads/2021/08/Silver-Quest-Medal.png' title='Silver Download'> ";
+                      allowenceImage += "<a href='"+dl_linkxyzzu+"' target='_blank'><img style='height:20px; float:right;' src='https://festingervault.com/wp-content/uploads/2021/08/Silver-Quest-Medal.png' title='Silver Download'> </a>";
                     }
 
                 })
@@ -2373,6 +2392,8 @@ function load_data(ajax_search = "", page = 1) {
                 here_multiple_download_button +
                 " " +
                 here_virus_scan_button +  
+                " " + 
+                here_download_content_button + 
                 "  </div> </div> </div></div>";
 
               if (j % final_show_num_of_items == 0) {
@@ -2845,5 +2866,453 @@ jQuery(document).ready(function() {
 
 
 });
+
+
+
+function grab_dc_product_dcontents(d){
+    jQuery("#overlay").fadeIn(300);　
+    jQuery(".progress").hide();
+
+    var product_hash = (d.getAttribute("data-id"));
+ 
+      var ajax_url = plugin_ajax_object.ajax_url;
+      jQuery.ajax({ 
+           data: {action: 'fv_fs_plugin_dc_contents_ajax', product_hash:product_hash},
+           type: 'POST',
+           url: ajax_url,
+           success: function(data) {
+            console.log(data);
+              var data_s = data.slice(0, -1);
+              var json = JSON.parse(data_s);
+              console.log(json);
+
+              if (json.length === 0) {
+                jQuery('#empModal').modal('hide');
+
+                jQuery.alert({
+                    content: 'No contents found.',
+                });
+              } else {
+                
+
+
+                var button_data = '<table class="table table-bordered data_table998fv" style="color:#fff; border:1px solid #fff;"> <thead> <tr> <th class="text-white">File name</th> <th class="text-white">Type</th> <th class="text-white">Date</th> <th class="text-white">Action</th> </tr> </thead> <tbody>';
+                var getIdFromContent = null;
+                jQuery.each(json, function(index, item) {
+                    if(item){
+                        
+                    
+                  var ind_item = (item);
+                  const dateTimeStringFvDc = ind_item.created_at;
+                  const datePartFvDC = dateTimeStringFvDc.split(" ")[0];
+
+
+
+                  const inputStringfvdc = ind_item.content_type;
+
+                  // Step 1: Remove the hyphen and split the string into an array
+                  const wordsArrayfvdc = inputStringfvdc.split("-");
+
+                  // Step 2: Capitalize each word in the array
+                  const capitalizedWordsArrayfvdc = wordsArrayfvdc.map((word) => {
+                    return word.charAt(0).toUpperCase() + word.slice(1);
+                  });
+
+                  // Step 3: Join the words back together to form the final string
+                  const resultStringFvDc = capitalizedWordsArrayfvdc.join("");
+
+
+
+
+
+                  if(getIdFromContent == null){
+                    getIdFromContent = ind_item.id;
+                  }
+                  button_data += '<tr class="text-white">';
+                  button_data += '<td class="text-white">';
+                    button_data += ind_item.content_name;
+                  button_data += '</td>';
+                  button_data += '<td class="text-white">';
+                    button_data += resultStringFvDc;
+                    button_data += '</td>';
+                    button_data += '<td class="text-white">';
+                  button_data += datePartFvDC;
+                    button_data += '</td>';
+                    button_data += '<td class="text-white">';
+
+                  button_data += '<button id="dc_option"  onclick="grab_dc_product_hash(this);" data-dltype="single" data-id="'+ind_item.id+'" onclick="grab_product_dowload_link_dc(this); this.disabled=true;" class="btn btn-success btn-xs text-white download_dc_fv" style="padding: 1px 7px 1px 0px; font-size: 12px;"> &nbsp; Download </button>';
+                  button_data += '</td>';
+                  button_data += '</tr>';
+                    }
+                });
+                  button_data += '</table>';
+                  button_data += '<table class="table" style="color:#fff;margin-top:20px;"> <tr> <td colspan><button class="btn btn-success btn-xs text-white download_dc_fv" onclick="grab_dc_product_hash(this);" data-dltype="all_dl" data-id="'+getIdFromContent+'" style="width:100%;"> Download all </button></td </tr> </table>';
+              
+                jQuery('.modal-body').html(button_data);
+                jQuery('#empModal').modal('show');
+
+//
+
+
+                  $('.data_table998fv').DataTable({
+                      "pageLength": 10
+                  });
+
+
+
+
+
+              }
+
+
+
+
+
+
+            setTimeout(function(){
+              jQuery("#overlay").fadeOut(300);
+            },500);
+
+              
+          }
+      }).done(function() {
+        setTimeout(function(){
+          jQuery("#overlay").fadeOut(300);
+        },500);
+      });
+}
+
+//demo contents product button web
+function grab_dc_product_hash(d){
+    jQuery("#overlay").fadeIn(300);　
+
+    var product_hash = (d.getAttribute("data-id"));
+    var data_dltype = (d.getAttribute("data-dltype"));
+    var product_mfile_id = '';
+
+ 
+    jQuery(".cs-fp-follow-button").click();
+      var ajax_url = plugin_ajax_object.ajax_url;
+      jQuery.ajax({ 
+           data: {action: 'fv_fs_plugin_dc_buttons_ajax', product_hash:product_hash, data_dltype:data_dltype},
+           type: 'POST',
+           url: ajax_url,
+           success: function(data) {
+              var data_s = data.slice(0, -1);
+              var json = JSON.parse(data_s);
+              console.log(json);
+
+
+               if(data_s == null || data_s.length == 5){
+                jQuery.alert({
+                    content: 'No downloadable file is available for this item. Please try again later',
+                });
+              }else{               
+               
+                
+                   if(json.result == 'invalid'){
+                        setTimeout(function(){
+                          jQuery("#overlay").fadeOut(300);
+                        },500);
+
+                        if(json.msg == 'Please login to download.'){
+                          window.location="/get-started/";
+                        }else{
+
+                          jQuery.alert({
+                              content: json.msg,
+                          });
+                        }
+
+                  }
+                  
+
+              if(data_s.length == 0){
+                jQuery.alert({
+                    content: 'To enjoy this feature please activate your license.',
+                });
+              }else{
+                collectortdc(json);
+              }
+
+              
+              }
+
+
+
+              
+          }
+      }).done(function() {
+        setTimeout(function(){
+          jQuery("#overlay").fadeOut(300);
+        },500);
+      });
+  }
+
+
+
+
+
+
+function collectortdc(json){
+  var button_data = '<div class="row">';
+
+  jQuery.each(json, function(index, item) {
+      if(item){
+          
+      
+    var ind_item = JSON.parse(item);
+    button_data += '<div class="col-md-6"><div class="card mb-2 bg-light" style="min-width:100%;">';
+    button_data += '<div class="card-header">';
+      button_data += ind_item.plan_name;
+    button_data += '</div>';
+    button_data += '<ul class="list-group list-group-flush">';
+      button_data += '<li class="list-group-item">Plan Type<b>: '+ind_item.plan_type.toUpperCase()+'</b></li>';
+      button_data += '<li class="list-group-item">Plan Limit: '+ind_item.plan_limit+'</li>';
+      button_data += '<li class="list-group-item">Available Limit: '+(ind_item.download_available)+'</li>';
+    button_data += '</ul>';
+    button_data += '<div class="card-footer"><button style="width:100%;" id="dc_option" data-license="'+ ind_item.license_key+'" data-id="'+ind_item.product_hash+'" data-dltype="'+ind_item.dl_type+'" onclick="grab_product_dowload_link_dc(this); this.disabled=true;" class="btn btn-sm btn-block card-btn"><i class="fa fa-arrow-down"></i>  &nbsp; Download from '+ind_item.plan_type.toUpperCase()+' plan </button> </div> ';
+    button_data += '</div>';
+    button_data += '</div>';
+      }
+  });
+    button_data += '</div>';
+
+      jQuery('.modal-body').html(button_data);
+      jQuery('#empModal').modal('show');
+      setTimeout(function(){
+        jQuery("#overlay").fadeOut(300);
+      },500);
+
+}
+
+
+
+
+
+
+
+
+function collectort(json) {
+
+  var button_data = '<div class="row">';
+
+  jQuery.each(json, function (index, item) {
+    var ind_item = JSON.parse(item);
+
+    let count_versions = (ind_item.other_available_versions.length);
+    let whichevent = 'onChange';
+    if(count_versions == 1){
+      whichevent = 'onClick';
+
+    }
+    button_data +=
+      '<div class="col"><div class="card bg-light" style="min-width:100%;"> ';
+    button_data += '<div class="card-header">';
+    button_data += ind_item.plan_name;
+    button_data += "</div>";
+    button_data += '<ul class="list-group list-group-flush">';
+    button_data +=
+      '<li class="list-group-item">Plan Type<b>: ' +
+      ind_item.plan_type.toUpperCase() +
+      "</b></li>";
+    button_data +=
+      '<li class="list-group-item">Plan Limit: ' +
+      ind_item.plan_limit +
+      "</li>";
+    button_data +=
+      '<li class="list-group-item">Available Limit: ' +
+      ind_item.download_available +
+      "</li>";
+    button_data += "</ul>";
+    button_data += "</div>";
+    button_data +=
+      '<button id="option1" data-license="' +
+      ind_item.license_key +
+      '" data-id="' +
+      ind_item.product_hash +
+      '" onclick="grab_product_dowload_link(this); this.disabled=true;" class="btn btn-sm btn-block card-btn"><i class="fa fa-download"></i>Download ' +
+      
+      " LATEST VERSION </button> ";
+
+      button_data += '<div class="row" style="margin-top:40px;">';
+
+        button_data += '<div class="col">';
+          button_data += '<table class="table table-bordered" style="color:#fff;">';
+                  button_data += "<tr>";
+                    button_data += "<td>";
+
+                      button_data += '<div class="input-group text-white">';
+                      button_data += '<label class="input-group-text" for="inputGroupSelect01">Please choose your preferred version. Once selected, it will be installed and activated automatically</label>';
+                      button_data += '<select '+whichevent+'="grab_product_dowload_link(this); this.disabled=true;" class="form-select text-white '+ind_item.license_key+ind_item.product_hash+'" name="downloadOtherVerions">';
+                      
+                      /*
+                      jQuery.each(ind_item.other_available_versions.reverse(), function (index2, item2) {
+
+                        button_data += '<option value="'+item2.generated_version+'" data-key="'+item2.filename+'" data-license="' +
+                                                ind_item.license_key +
+                                                '" data-id="' +
+                                                ind_item.product_hash +
+                                                '" >Version '+item2.generated_version+'</option>';
+
+                      });
+
+                      */
+                      if (Array.isArray(ind_item.other_available_versions)) {
+                        jQuery.each(ind_item.other_available_versions.reverse(), function (index2, item2) {
+                          button_data += '<option value="'+item2.generated_version+'" data-key="'+item2.filename+'" data-license="' +
+                            ind_item.license_key +
+                            '" data-id="' +
+                            ind_item.product_hash +
+                            '" >Version '+item2.generated_version+'</option>';
+                        });
+                      }
+
+
+
+
+                      button_data += '</select>';
+
+                      /*button_data +=  '<button id="option1" data-license="' +
+                                        ind_item.license_key +
+                                        '" data-id="' +
+                                        ind_item.product_hash +
+                                        '" onclick="grab_product_dowload_link(this); this.disabled=true;" class="btn btn-outline-secondary card-btn"><i class="fa fa-download"></i>Download from ' +
+                                        ind_item.plan_type.toUpperCase() +
+                                        " plan </button> </div>";*/
+                    button_data += "</td>";
+                  button_data += "</tr>";
+
+
+          button_data += "</table>";
+        button_data += "</div>";
+      button_data += "</div>";
+
+
+
+    button_data += "</div>";
+
+
+
+  });
+  button_data += "</div>";
+
+
+
+
+    
+
+
+
+  jQuery(".modal-body").html(button_data);
+  jQuery("#empModal").modal("show");
+  setTimeout(function () {
+    jQuery("#overlay").fadeOut(300);
+  }, 500);
+}
+
+
+
+   function getFileNameFromURL(url) {
+      // Get the part of the URL after the last '/'
+      var filenameWithParams = url.substring(url.lastIndexOf('/') + 1);
+
+      // Remove query parameters from the filename (everything after the '?')
+      var filenameWithoutParams = filenameWithParams.split('?')[0];
+
+      // Extract the file name and extension
+      var parts = filenameWithoutParams.split('.');
+      var extension = parts.pop();
+      var filename = parts.join('.');
+
+      filenameFinal = filename+extension;
+      console.log(filenameFinal);
+      return filenameFinal;
+      //return { filename: filename, extension: extension };
+    }
+
+
+    function downloadFileDC(url) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.responseType = 'blob';
+
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          var blob = xhr.response;
+          var filename = getFileNameFromURL(url); // Use the getFileNameFromURL function to extract the filename
+          var a = document.createElement('a');
+          a.href = window.URL.createObjectURL(blob);
+          a.download = filename;
+          a.style.display = 'none';
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(a.href);
+        }
+      };
+
+      xhr.send();
+    }
+
+
+
+  function grab_product_dowload_link_dc(d){
+    jQuery("#overlay").fadeIn(300);　
+
+    var plugin_download_hash = (d.getAttribute("data-id"));
+    var license_key = (d.getAttribute("data-license"));
+    var download_type = (d.getAttribute("data-dltype"));
+    var ajax_url = plugin_ajax_object.ajax_url;
+
+      jQuery.ajax({ 
+           data: {action: 'fv_fs_plugin_download_ajax_dc', plugin_download_hash:plugin_download_hash, license_key:license_key, download_type:download_type},
+           type: 'POST',
+           url: ajax_url,
+           success: function(data) {
+
+              var data_s = data.slice(0, -1);
+              var json = JSON.parse(data_s);
+
+              console.log(json);
+              if(json.result == 'success'){
+              jQuery('#'+license_key+' #plan_limit_id').html( json.plan_limit );
+              jQuery('#'+license_key+' #current_limit_id').html( json.download_current_limit );
+              jQuery('#'+license_key+' #limit_available_id').html( json.download_available + ' / ');
+
+                if(download_type == 'single'){
+                    downloadFileDC(json.link);
+                }else{
+                    location.href = json.link;
+                }
+
+                jQuery('#empModal').modal('hide'); 
+              }else{
+                jQuery('#empModal').modal('hide'); 
+          
+                  if(json.msg){
+                    jQuery.alert({
+                        title: 'Alert!',
+                        content: json.msg,
+                    });
+                  }else{
+                    jQuery.alert({
+                        title: 'Alert!',
+                        content: 'Something went wrong, Please try again later!',
+                    });
+                  }
+                
+              }
+          }
+      }).done(function() {
+        setTimeout(function(){
+          jQuery("#overlay").fadeOut(300);
+        },500);
+      });
+
+  }
+ 
+
+
+
 
 

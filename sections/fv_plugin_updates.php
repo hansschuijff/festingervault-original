@@ -275,8 +275,34 @@
 
 		                	</td>";
 
+
+
+
 							
-		                echo "<td ><div class='row'><div class='col-6 text-left text-grey'>Current</div><div class='col-6 text-left'>{$value['Version']}</div><div class='col-6 text-left text-grey'>New</div><div class='col-6 text-left' ".$bgredhere.">{$new_version}</div></td>";
+
+							
+		                echo "<td ><div class='row'><div class='col-6 text-left text-grey'>Current</div><div class='col-6 text-left'>{$value['Version']}</div>";
+
+
+							if((int)($new_version) > (int)($value['Version'])){
+								echo "
+							<div class='col-6 text-left text-grey'>New</div>
+
+								<div class='col-6 text-left' ".$bgredhere.">{$new_version}</div>";
+							}
+			
+							$version1 = $value['Version'];
+							$version2 = $new_version;
+
+							if (version_compare($version1, $version2, '<')) {
+							    echo "
+							<div class='col-6 text-left text-grey'>New</div>
+
+							    <div class='col-6 text-left' ".$bgredhere.">{$new_version}</div>";
+							} 
+
+
+		                echo "</td>";
 
 						// echo "<td class='text-center'>";
 						// 	echo $new_version;

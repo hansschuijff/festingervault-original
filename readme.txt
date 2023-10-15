@@ -88,4 +88,6 @@ Download Install progress bar
 Bug fixed
 New pagination for better and faster loading
 
-
+--4.1.0--
+New features
+Bug fixing

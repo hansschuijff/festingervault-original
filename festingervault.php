@@ -1,11 +1,11 @@
 <?php
 
-ini_set('memory_limit', '512M');
+//ini_set('memory_limit', '256');
 
 /**
 Plugin Name: Festinger Vault
 description: Festinger vault - The largest plugin market
-Version: 4.0.0
+Version: 4.1.0
 Author: Festinger Vault
 License: GPLv2 or later
 Text Domain: festingervault
@@ -19,7 +19,7 @@ if (!defined('FV_PLUGIN_ROOT_PHP'))
     define( 'FV_PLUGIN_ROOT_PHP', dirname(__FILE__).'/'.basename(__FILE__)  );
 if(!defined('FV_PLUGIN_ABSOLUTE_PATH'))
     define('FV_PLUGIN_ABSOLUTE_PATH',plugin_dir_url(__FILE__));
-    define('FV_PLUGIN_VERSION', '4.0.0');
+    define('FV_PLUGIN_VERSION', '4.1.0');
 
 
 
@@ -1548,8 +1548,22 @@ function festinger_vault_plugin_updates_function(){
 			$new_version  = '';
 			$chk_pkg_type = '';
 
+// echo "<pre style='color:white;'>";
+// print_r($fetching_plugin_lists_full);
+// echo "<hr/>";
+// print_r($allPlugins);
+// echo "</pre>";
 
 	        foreach($allPlugins as $key => $value) {
+
+
+// echo "<pre style='color:white;'>";
+// print_r(get_plugin_slug_from_data($key, $value));
+// print_r($value);
+
+// echo "<hr/>";
+// echo "</pre>";
+
 
 			if($fetching_plugin_lists != null){
 				if (in_array(get_plugin_slug_from_data($key, $value), $fetching_plugin_lists)){
