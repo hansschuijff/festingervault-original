@@ -75,7 +75,7 @@ jQuery(document).ready(function (jQuery) {
             });
           }
 
-              location.reload(true);
+             location.reload(true);
         }
 
       },
@@ -181,7 +181,6 @@ jQuery(document).ready(function (jQuery) {
   //   if ("all" == filterValue) {
   //     row.show();
   //   }
-  //   console.log(filterValue);
   // });
 
   jQuery("#reset_filter").click(function () {
@@ -1402,6 +1401,7 @@ function updateProgressBar(fileSize) {
 
 function collectortMultiple(json, type) {
 
+
   if(type == 'download'){
     var typeBtnText = 'Download Bundle';
     var typeBtnIcon = 'fa fa-download';
@@ -1548,18 +1548,7 @@ function collectort(json) {
                       button_data += '<label class="input-group-text" for="inputGroupSelect01">Please choose your preferred version. Once selected, it will be installed and activated automatically</label>';
                       button_data += '<select '+whichevent+'="grab_product_dowload_link(this); this.disabled=true;" class="form-select text-white '+ind_item.license_key+ind_item.product_hash+'" name="downloadOtherVerions">';
                       
-                      /*
-                      jQuery.each(ind_item.other_available_versions.reverse(), function (index2, item2) {
-
-                        button_data += '<option value="'+item2.generated_version+'" data-key="'+item2.filename+'" data-license="' +
-                                                ind_item.license_key +
-                                                '" data-id="' +
-                                                ind_item.product_hash +
-                                                '" >Version '+item2.generated_version+'</option>';
-
-                      });
-
-                      */
+                     
                       if (Array.isArray(ind_item.other_available_versions)) {
                         jQuery.each(ind_item.other_available_versions.reverse(), function (index2, item2) {
                           button_data += '<option value="'+item2.generated_version+'" data-key="'+item2.filename+'" data-license="' +
@@ -1575,13 +1564,6 @@ function collectort(json) {
 
                       button_data += '</select>';
 
-                      /*button_data +=  '<button id="option1" data-license="' +
-                                        ind_item.license_key +
-                                        '" data-id="' +
-                                        ind_item.product_hash +
-                                        '" onclick="grab_product_dowload_link(this); this.disabled=true;" class="btn btn-outline-secondary card-btn"><i class="fa fa-download"></i>Download from ' +
-                                        ind_item.plan_type.toUpperCase() +
-                                        " plan </button> </div>";*/
                     button_data += "</td>";
                   button_data += "</tr>";
 
@@ -1796,24 +1778,6 @@ function install_btn_modal_pop_button(json) {
                       button_data += '<label class="input-group-text" for="inputGroupSelect01">Please choose your preferred version. Once selected, it will be installed and activated automatically</label>';
                       button_data += '<select '+whichevent+'="grab_product_install_link(this); this.disabled=true;" class="form-select text-white '+ind_item.license_key+ind_item.product_hash+'" name="downloadOtherVerions">';
                       
-                      /*
-
-                      jQuery.each(ind_item.other_available_versions.reverse(), function (index3, item3) {
-
-                        button_data += '<option value="'+item3.generated_version+'" data-license="' +
-                                              ind_item.license_key +
-                                              '" data-type="' +
-                                              ind_item.product_type +
-                                              '" data-id="' +
-                                              ind_item.product_hash +
-                                              '" data-key="' +
-                                              item3.filename +
-                                              '" >Version '+item3.generated_version+'</option>';
-
-                      });
-
-                      */
-
 
                       if (Array.isArray(ind_item.other_available_versions)) {
                         jQuery.each(ind_item.other_available_versions.reverse(), function (index3, item3) {
@@ -1997,7 +1961,6 @@ function load_data(ajax_search = "", page = 1) {
 
         var data_s = data.slice(0, -1);
         var json = JSON.parse(data_s);
-        console.log(json);
         var here_install_button = "";
         var featured_button = "";
 
@@ -2248,7 +2211,7 @@ function load_data(ajax_search = "", page = 1) {
                   f.new_generated_slug +
                   '"data-generated-name="' +
                   f.title +
-                  '" href="#" onclick="grab_product_report_link(this);" class="btn ' + ' btn-sm btn-block card-btn "><i class="fas fa-flag"></i> Report Item </button>  </div>';
+                  '" href="#" onclick="grab_product_report_link(this);" class="btn ' + ' btn-sm btn-block card-btn '+disable_the_button+'"><i class="fas fa-flag"></i> Report Item </button>  </div>';
                    
 
 
@@ -2491,12 +2454,7 @@ function showToast() {
 
 
 function add_to_cart_fv(d) {
-    //$('#cart-dropdown').toggle();
-    /*let dropdownMenu = document.querySelector('.dropdown-menu.cart-dropdown');
-    if (!dropdownMenu.classList.contains('show')) {
-      dropdownMenu.classList.add('show');
-    }
-*/
+
 
   var productId = d.getAttribute("data-id");
   var productName = d.getAttribute("data-itemname");
@@ -2560,19 +2518,6 @@ function remove_from_cart(d) {
 };
 
 
-  /*
-
-    function getCartData() {
-        var cartData = $.cookie('cartData');
-        if (typeof cartData !== 'undefined') {
-            cartData = JSON.parse(cartData);
-        } else {
-            cartData = {};
-        }
-        return cartData;
-    }
-
-    */
 
     function getCartData() {
         var cartData = $.cookie('cartData');
@@ -2591,12 +2536,6 @@ function remove_from_cart(d) {
         return cartData;
     }
 
-
-    /*
-    function setCartData(cartData) {
-        $.cookie('cartData', JSON.stringify(cartData));
-    }
-    */
 
     function setCartData(cartData) {
         var expires = new Date();
@@ -2774,6 +2713,8 @@ function refreshCartDisplay() {
         var data_s = data.slice(0, -1);
         var json = JSON.parse(data_s);
 
+        
+
         if (json.result == "failed") {
           setTimeout(function () {
             jQuery("#overlay").fadeOut(300);
@@ -2881,10 +2822,8 @@ function grab_dc_product_dcontents(d){
            type: 'POST',
            url: ajax_url,
            success: function(data) {
-            console.log(data);
               var data_s = data.slice(0, -1);
               var json = JSON.parse(data_s);
-              console.log(json);
 
               if (json.length === 0) {
                 jQuery('#empModal').modal('hide');
@@ -3000,7 +2939,6 @@ function grab_dc_product_hash(d){
            success: function(data) {
               var data_s = data.slice(0, -1);
               var json = JSON.parse(data_s);
-              console.log(json);
 
 
                if(data_s == null || data_s.length == 5){
@@ -3146,18 +3084,7 @@ function collectort(json) {
                       button_data += '<label class="input-group-text" for="inputGroupSelect01">Please choose your preferred version. Once selected, it will be installed and activated automatically</label>';
                       button_data += '<select '+whichevent+'="grab_product_dowload_link(this); this.disabled=true;" class="form-select text-white '+ind_item.license_key+ind_item.product_hash+'" name="downloadOtherVerions">';
                       
-                      /*
-                      jQuery.each(ind_item.other_available_versions.reverse(), function (index2, item2) {
-
-                        button_data += '<option value="'+item2.generated_version+'" data-key="'+item2.filename+'" data-license="' +
-                                                ind_item.license_key +
-                                                '" data-id="' +
-                                                ind_item.product_hash +
-                                                '" >Version '+item2.generated_version+'</option>';
-
-                      });
-
-                      */
+                   
                       if (Array.isArray(ind_item.other_available_versions)) {
                         jQuery.each(ind_item.other_available_versions.reverse(), function (index2, item2) {
                           button_data += '<option value="'+item2.generated_version+'" data-key="'+item2.filename+'" data-license="' +
@@ -3173,13 +3100,7 @@ function collectort(json) {
 
                       button_data += '</select>';
 
-                      /*button_data +=  '<button id="option1" data-license="' +
-                                        ind_item.license_key +
-                                        '" data-id="' +
-                                        ind_item.product_hash +
-                                        '" onclick="grab_product_dowload_link(this); this.disabled=true;" class="btn btn-outline-secondary card-btn"><i class="fa fa-download"></i>Download from ' +
-                                        ind_item.plan_type.toUpperCase() +
-                                        " plan </button> </div>";*/
+                      
                     button_data += "</td>";
                   button_data += "</tr>";
 
@@ -3226,7 +3147,6 @@ function collectort(json) {
       var filename = parts.join('.');
 
       filenameFinal = filename+extension;
-      console.log(filenameFinal);
       return filenameFinal;
       //return { filename: filename, extension: extension };
     }
@@ -3273,7 +3193,6 @@ function collectort(json) {
               var data_s = data.slice(0, -1);
               var json = JSON.parse(data_s);
 
-              console.log(json);
               if(json.result == 'success'){
               jQuery('#'+license_key+' #plan_limit_id').html( json.plan_limit );
               jQuery('#'+license_key+' #current_limit_id').html( json.download_current_limit );

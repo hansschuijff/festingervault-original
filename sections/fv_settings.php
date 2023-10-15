@@ -1,5 +1,49 @@
 <div class="container-padding">
-    <div class="">
+
+    <div class="row">
+        <div class="col-md-12">
+            <h5 class="text-white mt-4 fw-bold">
+                Plugins & Themes Auto Update
+            </h5>
+            <div class="card card-bg-cus mb-3 " style="padding: 20px 0 !important; min-width: 100%;">
+
+                <div class="card-body padding-horizontal">
+                    <form method="post" action="" name="autpupdatestatus_form">
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+
+                                <div class="form-check">
+                                    <input class="form-check-input custom-checkbox-color" type="checkbox"
+                                        <?php if($all_license_data->auto_update_status == 1){echo 'checked';} ?>
+                                        name="an_fv_dis_adm_not_hid" value="1" id="only_dismissable">
+                                    <label class="form-check-label" for="only_dismissable" style="margin-top: -19px;">
+                                        Enable Auto Update
+                                    </label>
+                                </div>
+                                <?php if($last_auto_update_time): ?>
+                                    <div class="text-white">Last updated: <?= $last_auto_update_time;?> </div>
+                                <?php endif;?>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class='col-md-12'>
+                                <hr style="margin: 25px auto; height:0.5px; background-color: #4d378e !important;" />
+                            </div>
+                            <div class="col-md-2"><input type="submit"
+                                    class="mt-3 btn btn-block non_active_button primary-btn" name="autpupdatestatus_form"
+                                    value="Update" /></div>
+                        </div>
+                </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
         <div class="col-md-12">
             <?php if(get_option('wl_fv_plugin_wl_enable') !=1):?>
             <h5 class="text-white mt-4 fw-bold">

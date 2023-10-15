@@ -295,6 +295,59 @@ function fv_plugin_buttons_ajax_multiple(){
 	}
 
 	$license_data = json_decode(wp_remote_retrieve_body($response));
+
+
+
+	if ($license_data) {
+		//echo json_encode($license_data[0]);
+
+
+		$dataLayer = json_decode($license_data[0]);
+        $dataLayer = ($dataLayer->product_hash);
+
+      
+	    foreach ($dataLayer as $product) {
+	    	
+	        $product_type = $product->product_type;
+	        $product_slug = $product->product_slug;
+
+
+	        if($product_type == 'wordpress-plugins'){
+
+				if(!in_array($product_slug, get_option('fv_plugin_auto_update_list'))){
+
+					$auto_update_plugin_list = get_option('fv_plugin_auto_update_list');
+
+					array_push($auto_update_plugin_list, $product_slug);
+					update_option('fv_plugin_auto_update_list', $auto_update_plugin_list);
+				}
+
+
+
+	        }
+
+	        if($product_type == 'wordpress-themes'){
+
+
+				if(!in_array($product_slug, get_option('fv_themes_auto_update_list'))) {
+
+					
+					$auto_update_themefv_list = get_option('fv_themes_auto_update_list');
+
+					echo json_encode($auto_update_themefv_list);
+
+					array_push($auto_update_themefv_list, $product_slug);
+					update_option('fv_themes_auto_update_list', $auto_update_themefv_list);
+				}
+
+	        }
+
+	    }
+	}
+
+
+
+
 	echo json_encode($license_data);
 
 } // end of show_download_buttons
@@ -640,33 +693,26 @@ function fv_plugin_install_bulk_ajax(){
 	$chk_any = 0;
 
 
-//bulk install start 
 
 				WP_Filesystem(); 
 
-$directory_path = WP_CONTENT_DIR . '/custom-directory'; // Replace "custom-directory" with your desired directory name.
+				$directory_path = WP_CONTENT_DIR . '/custom-directory'; // Replace "custom-directory" with your desired directory name.
 
 
-$upload_dir      = wp_upload_dir();
-$fv_plugin_zip_upload_bulk_dir=$upload_dir["basedir"]."/fv_bulk_install_dir/";
-$fv_plugin_zip_upload_bulk_dir_extract=$upload_dir["basedir"]."/fv_bulk_install_dir_extract/";
+				$upload_dir      = wp_upload_dir();
+				$fv_plugin_zip_upload_bulk_dir=$upload_dir["basedir"]."/fv_bulk_install_dir/";
+				$fv_plugin_zip_upload_bulk_dir_extract=$upload_dir["basedir"]."/fv_bulk_install_dir_extract/";
 
 
-if ( ! file_exists( $fv_plugin_zip_upload_bulk_dir ) ) {
-    wp_mkdir_p( $fv_plugin_zip_upload_bulk_dir );
-}
+				if ( ! file_exists( $fv_plugin_zip_upload_bulk_dir ) ) {
+				    wp_mkdir_p( $fv_plugin_zip_upload_bulk_dir );
+				}
 
-if ( ! file_exists( $fv_plugin_zip_upload_bulk_dir_extract ) ) {
-    wp_mkdir_p( $fv_plugin_zip_upload_bulk_dir_extract );
-}
+				if ( ! file_exists( $fv_plugin_zip_upload_bulk_dir_extract ) ) {
+				    wp_mkdir_p( $fv_plugin_zip_upload_bulk_dir_extract );
+				}
 
-// get the file zip 
-// unzip it 
-//run the loop 
-//for theme install theme 
-//for plugin install plugin 
-
-$return_data = [];
+				$return_data = [];
 
 
 
@@ -709,51 +755,41 @@ $return_data = [];
 				    //unlink($tmpfile);
 				}
 
-/*
-                $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-		        if($ext=='zip'){
-					
-		            $basename=pathinfo($fileName,  PATHINFO_BASENAME);
-		
-		            $un= unzip_file($fv_plugin_zip_upload_bulk_dir.$basename,$fv_plugin_zip_upload_bulk_dir_extract);
-		            if(!is_wp_error($un)){
-		              //  unlink($fv_plugin_zip_upload_bulk_dir.$basename);
-		            }
-		        }
-*/
-	//$fv_plugin_zip_upload_bulk_dir = 'path/to/zip/file';
-//$fv_plugin_zip_upload_bulk_dir_extract = 'path/to/extract/files';
-$zip = new ZipArchive;
-$res = $zip->open($fv_plugin_zip_upload_bulk_dir.$fileName);
 
 
-if ($res === TRUE) {
+				$zip = new ZipArchive;
+				$res = $zip->open($fv_plugin_zip_upload_bulk_dir.$fileName);
 
-    $zip->extractTo($fv_plugin_zip_upload_bulk_dir_extract);
-    $zip->close();
-    $files = scandir($fv_plugin_zip_upload_bulk_dir_extract);
 
-    foreach ($files as $file) {
-        if (pathinfo($file, PATHINFO_EXTENSION) === 'zip') {
-            $package = $fv_plugin_zip_upload_bulk_dir_extract . '/' . $file;
-           // $return_data[] = $file;
-            $type = '';
-            if (strpos($file, '___theme___') !== false) {
-                $type = 'theme';
-            } else if (strpos($file, '___plugin___') !== false) {
-                $type = 'plugin';
-            }
-            if (!empty($type)) {
-                if ($type === 'theme') {
-                    $un= unzip_file($package,get_theme_root());
-                } else if ($type === 'plugin') {
-                    $un= unzip_file($package,WP_PLUGIN_DIR);
-                }
-                unlink($package);
-            }
-        }
-    }
-}
+				if ($res === TRUE) {
+
+				    $zip->extractTo($fv_plugin_zip_upload_bulk_dir_extract);
+				    $zip->close();
+				    $files = scandir($fv_plugin_zip_upload_bulk_dir_extract);
+
+				    foreach ($files as $file) {
+				        if (pathinfo($file, PATHINFO_EXTENSION) === 'zip') {
+				            $package = $fv_plugin_zip_upload_bulk_dir_extract . '/' . $file;
+				           // $return_data[] = $file;
+				            $type = '';
+				            if (strpos($file, '___theme___') !== false) {
+				                $type = 'theme';
+				            } else if (strpos($file, '___plugin___') !== false) {
+				                $type = 'plugin';
+				            }
+				            if (!empty($type)) {
+				                if ($type === 'theme') {
+
+				                    $un= unzip_file($package,get_theme_root());
+				                } else if ($type === 'plugin') {
+
+				                    $un= unzip_file($package,WP_PLUGIN_DIR);
+				                }
+				                unlink($package);
+				            }
+				        }
+				    }
+				}
 
 
 
@@ -929,6 +965,21 @@ function fv_plugin_install_ajax(){
 
 					$chk_any = 1;
 
+
+
+
+
+
+					if(get_option('fv_plugin_auto_update_list') == true && !in_array($license_data->content_slug, get_option('fv_plugin_auto_update_list'))){
+
+						$auto_update_plugin_list = get_option('fv_plugin_auto_update_list');
+
+						array_push($auto_update_plugin_list, $license_data->content_slug);
+						update_option('fv_plugin_auto_update_list', $auto_update_plugin_list);
+					}
+
+
+
 				
 			
 					$final_success_data = [
@@ -1014,6 +1065,18 @@ function fv_plugin_install_ajax(){
 
 
 					$chk_any = 1;
+
+
+
+					if(get_option('fv_themes_auto_update_list') == true && !in_array($license_data->content_slug, get_option('fv_themes_auto_update_list'))){
+
+						$auto_update_themefv_list = get_option('fv_themes_auto_update_list');
+
+						array_push($auto_update_themefv_list, $license_data->content_slug);
+						update_option('fv_themes_auto_update_list', $auto_update_themefv_list);
+					}
+
+
 
 					$final_success_data = [
 						'result' => 'success',
