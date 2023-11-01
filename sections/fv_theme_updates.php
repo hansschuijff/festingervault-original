@@ -53,6 +53,7 @@
                 <?php else: ?>
                 <button class="btn btn-sm float-end primary-btn" style="margin-right:10px;" id="manual_force_update_instant_r">Instant Update All</button>
                 <?php endif; ?>
+                	<button class="btn btn-sm btn-sm float-end primary-btn" id="themesyncitems" data-id="theme" href="#" onclick="grab_product_hash_sync(this);"  style="margin-right: 10px;"> <i class="fas fa-sync"></i> Sync </button>
                 <?php endif; ?>
             </h4>
         </div>
@@ -274,3 +275,5 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="empModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background: rgba(0,0,0,0.8);"> <div class="modal-dialog modal-dialog-centered modal-lg"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> </div> <div class="modal-body" style="color: black;"></div> </div> </div> </div>

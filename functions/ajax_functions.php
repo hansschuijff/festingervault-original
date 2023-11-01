@@ -1414,6 +1414,55 @@ function fv_fs_plugin_dc_contents_ajax(){
 
 
 
+
+/*
+	By clicking download button
+	Modal will pop up and fetch download buttons
+	Based on licenses
+*/
+add_action('wp_ajax_fv_plugin_sync', 'fv_plugin_sync');
+add_action('wp_ajax_nopriv_fv_plugin_sync', 'fv_plugin_sync');
+
+function fv_plugin_sync(){
+
+	if(get_option('_data_ls_key_no_id_vf') && get_option('_ls_domain_sp_id_vf')){
+		$_ls_domain_sp_id_vf = get_option( '_ls_domain_sp_id_vf' );
+		$_data_ls_key_no_id_vf = get_option( '_data_ls_key_no_id_vf' );
+    }else{
+		$_ls_domain_sp_id_vf = get_option( '_ls_domain_sp_id_vf_2' );
+		$_data_ls_key_no_id_vf = get_option( '_data_ls_key_no_id_vf_2' );
+    }
+
+	$api_params = array(
+		'license_key' => $_data_ls_key_no_id_vf,
+	    'license_d' => $_ls_domain_sp_id_vf,
+	    'license_pp' => $_SERVER['REMOTE_ADDR'],
+	    'license_host'=> $_SERVER['HTTP_HOST'],
+	    'license_mode'=> 'buttons_sync',
+		'product_type' => $_POST['product_type'],
+	    'license_v'=>FV_PLUGIN_VERSION,
+	);
+
+	$query = esc_url_raw(add_query_arg($api_params, YOUR_LICENSE_SERVER_URL.'get-pro-buttons-sync'));	
+    $response = wp_remote_post($query, array('timeout' => 200, 'sslverify' => false));
+	
+	if (is_wp_error($response)){
+		$response = wp_remote_post($query, array('timeout' => 200, 'sslverify' => true));
+		if(is_wp_error($response)){
+				echo 'SSLVERIFY ERROR';			
+		}
+	}
+
+	$license_data = json_decode(wp_remote_retrieve_body($response));
+	echo json_encode($license_data);
+
+} // end of show_download_buttons
+
+
+
+
+
+
 add_action('wp_ajax_fv_fs_plugin_download_ajax_dc', 'fv_fs_plugin_download_ajax_dc');
 add_action('wp_ajax_nopriv_fv_fs_plugin_download_ajax_dc', 'fv_fs_plugin_download_ajax_dc');
 

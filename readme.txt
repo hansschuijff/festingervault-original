@@ -96,3 +96,11 @@ Bug fixing
 --4.2.0--
 Bug fixing
 Performance improvement
+
+
+
+--4.2.1--
+Sync feature added
+
+--4.2.4--
+Bug fixed

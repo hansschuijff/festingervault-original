@@ -638,6 +638,116 @@ function grab_product_hash(d) {
 
 
 
+function grab_product_hash_sync(d) {
+  jQuery(".progress").hide();
+  jQuery("#overlay").fadeIn(300);
+  var product_type = d.getAttribute("data-id");
+  //console.log(product_type);
+
+  var ajax_url = plugin_ajax_object.ajax_url;
+
+
+  jQuery
+    .ajax({
+      data: { action: "fv_plugin_sync", product_type: product_type },
+      type: "POST",
+      url: ajax_url,
+      success: function (data) {
+        var data_s = data.slice(0, -1);
+        var json = JSON.parse(data_s);
+        //console.log(json);
+
+        if (json.result == "failed") {
+          setTimeout(function () {
+            jQuery("#overlay").fadeOut(300);
+          }, 500);
+
+          jQuery.alert({
+            content: json.msg,
+          });
+        }
+        if (json.length == 0) {
+          jQuery.alert({
+            content: "To enjoy this feature please activate your license.",
+          });
+        } else {
+          collectort_sync(json);
+        }
+      },
+    })
+    .done(function () {
+      setTimeout(function () {
+        jQuery("#overlay").fadeOut(300);
+      }, 500);
+    });
+}
+
+
+
+
+
+
+function collectort_sync(json) {
+
+  var button_data = '<div class="row">';
+
+  jQuery.each(json, function (index, item) {
+    var ind_item = JSON.parse(item);
+
+    button_data +=
+      '<div class="col"><div class="card bg-light" style="min-width:100%;"> ';
+    button_data += '<div class="card-header">';
+    button_data += ind_item.plan_name;
+    button_data += "</div>";
+    button_data += '<ul class="list-group list-group-flush">';
+    button_data +=
+      '<li class="list-group-item">Plan Type<b>: ' +
+      ind_item.plan_type.toUpperCase() +
+      "</b></li>";
+    button_data +=
+      '<li class="list-group-item">Plan Limit: ' +
+      ind_item.plan_limit +
+      "</li>";
+    button_data +=
+      '<li class="list-group-item">Available Limit: ' +
+      ind_item.download_available +
+      "</li>";
+    button_data += "</ul>";
+    button_data += "</div>";
+    button_data +=
+      '<button id="option1" data-license="' +
+      ind_item.license_key +
+      '" data-id="' +
+      ind_item.product_type +
+      '" onclick="grab_product_sync_link(this); this.disabled=true;" class="btn btn-sm btn-block card-btn"><i class="fa fa-sync"></i>Sync now ' +
+      
+      "</button> ";
+
+
+    button_data += "</div>";
+
+
+
+  });
+  button_data += "</div>";
+
+
+
+
+    
+
+
+
+  jQuery(".modal-body").html(button_data);
+  jQuery("#empModal").modal("show");
+  setTimeout(function () {
+    jQuery("#overlay").fadeOut(300);
+  }, 500);
+}
+
+
+
+
 
 function grab_product_support_link(d) {
       jQuery(".progress").hide();
@@ -998,6 +1108,64 @@ function grab_product_dowload_link(d) {
             }
           }
         }
+      },
+    })
+    .done(function () {
+      setTimeout(function () {
+        jQuery("#overlay").fadeOut(300);
+      }, 500);
+    });
+}
+
+
+
+
+function grab_product_sync_link(d) {
+  jQuery("#overlay").fadeIn(300);
+  let dd = $(d).find('option:selected');
+    // Check if there is only one option in the select
+
+
+  var plugin_download_hash = dd.data("id");
+  var license_key = dd.data("license");
+
+
+  
+  if(typeof license_key === 'undefined' || license_key === undefined) {
+    var plugin_download_hash = d.getAttribute("data-id");
+    var license_key = d.getAttribute("data-license");
+  }
+
+  var ajax_url = plugin_ajax_object.ajax_url;
+  jQuery
+    .ajax({
+      data: {
+        action: "fv_plugins_themes_sync",
+        plugin_download_hash: plugin_download_hash,
+        license_key: license_key,
+      },
+      type: "POST",
+      url: ajax_url,
+      success: function (data) {
+        //console.log(data)
+
+
+        var data_s = data.slice(0, -1);
+        var json = JSON.parse(data_s);
+
+          jQuery("#empModal").modal("hide");
+            if (json.msg) {
+              jQuery.alert({
+                title: "Alert!",
+                content: json.msg,
+              });
+            } else {
+              jQuery.alert({
+                title: "Alert!",
+                content: "Something went wrong, Please try again later!",
+              });
+            }
+        
       },
     })
     .done(function () {
@@ -2286,18 +2454,20 @@ function load_data(ajax_search = "", page = 1) {
                 var json22 = JSON.parse(f.membershipallowance);
                 var values = Object.values(json22);
                 let dl_linkxyzzu = '#';
+                let target_checkfv = null;
                 if(show_title_img_fv_link != 0){
                   dl_linkxyzzu = 'https://community.festingervault.com/t/gold-silver-and-bronze-downloads/35448';
+                  target_checkfv = "target='_blank'";
                 }
                 $.each(values, function(index, value) {
                     if(value == 'bronze'){
-                      allowenceImage += "<a href='"+dl_linkxyzzu+"' target='_blank'><img style='height:20px; float:right;' src='https://festingervault.com/wp-content/uploads/2021/08/Orange-Quest-Medal.png' title='Bronze Download'> </a>";
+                      allowenceImage += "<a href='"+dl_linkxyzzu+"' '"+target_checkfv+"'><img style='height:20px; float:right;' src='https://festingervault.com/wp-content/uploads/2021/08/Orange-Quest-Medal.png' title='Bronze Download'> </a>";
                     }
                     if(value == 'gold'){
-                      allowenceImage += "<a href='"+dl_linkxyzzu+"' target='_blank'><img style='height:20px; float:right;' src='https://festingervault.com/wp-content/uploads/2021/08/Gold-Quest-Medal.png' title='Gold Download'> </a>";
+                      allowenceImage += "<a href='"+dl_linkxyzzu+"' '"+target_checkfv+"'><img style='height:20px; float:right;' src='https://festingervault.com/wp-content/uploads/2021/08/Gold-Quest-Medal.png' title='Gold Download'> </a>";
                     }
                     if(value == 'silver'){
-                      allowenceImage += "<a href='"+dl_linkxyzzu+"' target='_blank'><img style='height:20px; float:right;' src='https://festingervault.com/wp-content/uploads/2021/08/Silver-Quest-Medal.png' title='Silver Download'> </a>";
+                      allowenceImage += "<a href='"+dl_linkxyzzu+"' '"+target_checkfv+"'><img style='height:20px; float:right;' src='https://festingervault.com/wp-content/uploads/2021/08/Silver-Quest-Medal.png' title='Silver Download'> </a>";
                     }
 
                 })
