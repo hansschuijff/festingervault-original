@@ -163,13 +163,14 @@
 					
 					foreach($fetching_plugin_lists_full as $single_p){
 
+						if(isset($single_p->pkg_str)){
+							if($single_p->slug == get_plugin_slug_from_data($key, $value) && $single_p->pkg_str == 1){
+								$chk_pkg_type = 'onetime';
+							}
 
-						if($single_p->slug == get_plugin_slug_from_data($key, $value) && $single_p->pkg_str == 1){
-							$chk_pkg_type = 'onetime';
-						}
-
-						if($single_p->slug == get_plugin_slug_from_data($key, $value) && $single_p->pkg_str == 0){
-							$chk_pkg_type = 'recurring';
+							if($single_p->slug == get_plugin_slug_from_data($key, $value) && $single_p->pkg_str == 0){
+								$chk_pkg_type = 'recurring';
+							}
 						}
 
 

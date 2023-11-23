@@ -174,14 +174,17 @@
 
 
 					foreach($fetching_theme_lists_full as $single_p){
-						if($single_p->slug == $theme->template && $single_p->pkg_str_t == 1){
-							echo 'Onetime';
-							continue;
-						}
+						if(isset($single_p->pkg_str)){
 
-						if($single_p->slug == $theme->template && $single_p->pkg_str_t == 0){
-							echo 'Recurring';
-							continue;
+							if($single_p->slug == $theme->template && $single_p->pkg_str_t == 1){
+								echo 'Onetime';
+								continue;
+							}
+
+							if($single_p->slug == $theme->template && $single_p->pkg_str_t == 0){
+								echo 'Recurring';
+								continue;
+							}
 						}
 
 					}

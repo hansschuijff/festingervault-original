@@ -1,11 +1,9 @@
 <?php
 
-//ini_set('memory_limit', '256');
-
 /**
 Plugin Name: Festinger Vault
 description: Festinger vault - The largest plugin market
-Version: 4.2.5
+Version: 4.2.6
 Author: Festinger Vault
 License: GPLv2 or later
 Text Domain: festingervault
@@ -19,7 +17,7 @@ if (!defined('FV_PLUGIN_ROOT_PHP'))
     define( 'FV_PLUGIN_ROOT_PHP', dirname(__FILE__).'/'.basename(__FILE__)  );
 if(!defined('FV_PLUGIN_ABSOLUTE_PATH'))
     define('FV_PLUGIN_ABSOLUTE_PATH',plugin_dir_url(__FILE__));
-    define('FV_PLUGIN_VERSION', '4.2.5');
+    define('FV_PLUGIN_VERSION', '4.2.6');
 
 
 
@@ -737,13 +735,67 @@ if( ( isset($enablrrr->license_1->license_role_access_1->roleaccess_editor) &&  
 			    'festinger_vault_settings_function' // callback
 			); 
 
+			// Add a custom submenu with an external link
+			add_submenu_page(
+			    'festinger-vault',               // parent slug
+			    'Documentation',                // page title
+			    'Documentation',                // menu title
+			    'manage_options',                   // capability
+			    'festinger-vault-documentation',  // slug
+			    'festinger_vault_documentation_function' // callback
+			);
+			// Add a custom submenu with an external link
+			add_submenu_page(
+			    'festinger-vault',               // parent slug
+			    'Community',                // page title
+			    'Community',                // menu title
+			    'manage_options',                   // capability
+			    'festinger-vault-community',  // slug
+			    'festinger_vault_community_function' // callback
+			);
+			// Add a custom submenu with an external link
+			add_submenu_page(
+			    'festinger-vault',               // parent slug
+			    'Buy Now',                // page title
+			    'Buy Now',                // menu title
+			    'manage_options',                   // capability
+			    'festinger-vault-buy-now',  // slug
+			    'festinger_vault_buy_now_function' // callback
+			);
+
+
 		endif;
     }
 } 
 
 
 
+// Callback function for the external link submenu
+function festinger_vault_documentation_function() {
+    // Redirect to the external link
 
+	echo '<META HTTP-EQUIV="Refresh" Content="0; URL=https://community.festingervault.com/docs">';
+
+    exit;
+  
+}
+
+// Callback function for the external link submenu
+function festinger_vault_community_function() {
+    // Redirect to the external link
+	echo '<META HTTP-EQUIV="Refresh" Content="0; URL=https://community.festingervault.com/">';
+
+
+    exit;
+}
+
+// Callback function for the external link submenu
+function festinger_vault_buy_now_function() {
+    // Redirect to the external link
+	echo '<META HTTP-EQUIV="Refresh" Content="0; URL=https://festingervault.com/pricing">';
+
+    exit;
+}
 
 
 function remove_under_middle_score($string){
