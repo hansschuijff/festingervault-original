@@ -104,3 +104,7 @@ Sync feature added
 
 --4.2.4--
 Bug fixed
+
+
+--4.2.5--
+Bug fixed

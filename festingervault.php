@@ -5,7 +5,7 @@
 /**
 Plugin Name: Festinger Vault
 description: Festinger vault - The largest plugin market
-Version: 4.2.4
+Version: 4.2.5
 Author: Festinger Vault
 License: GPLv2 or later
 Text Domain: festingervault
@@ -19,7 +19,7 @@ if (!defined('FV_PLUGIN_ROOT_PHP'))
     define( 'FV_PLUGIN_ROOT_PHP', dirname(__FILE__).'/'.basename(__FILE__)  );
 if(!defined('FV_PLUGIN_ABSOLUTE_PATH'))
     define('FV_PLUGIN_ABSOLUTE_PATH',plugin_dir_url(__FILE__));
-    define('FV_PLUGIN_VERSION', '4.2.4');
+    define('FV_PLUGIN_VERSION', '4.2.5');
 
 
 

@@ -1159,6 +1159,8 @@ function grab_product_sync_link(d) {
                 title: "Alert!",
                 content: json.msg,
               });
+              window.location.reload();
+
             } else {
               jQuery.alert({
                 title: "Alert!",
