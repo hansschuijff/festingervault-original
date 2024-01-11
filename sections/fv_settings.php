@@ -20,9 +20,6 @@
                                         Enable Auto Update
                                     </label>
                                 </div>
-                                <?php if($last_auto_update_time): ?>
-                                    <div class="text-white">Last updated: <?= $last_auto_update_time;?> </div>
-                                <?php endif;?>
                             </div>
 
                         </div>

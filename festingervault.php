@@ -3,7 +3,7 @@
 /**
 Plugin Name: Festinger Vault
 description: Festinger vault - The largest plugin market
-Version: 4.2.6
+Version: 4.2.7
 Author: Festinger Vault
 License: GPLv2 or later
 Text Domain: festingervault
@@ -17,7 +17,7 @@ if (!defined('FV_PLUGIN_ROOT_PHP'))
     define( 'FV_PLUGIN_ROOT_PHP', dirname(__FILE__).'/'.basename(__FILE__)  );
 if(!defined('FV_PLUGIN_ABSOLUTE_PATH'))
     define('FV_PLUGIN_ABSOLUTE_PATH',plugin_dir_url(__FILE__));
-    define('FV_PLUGIN_VERSION', '4.2.6');
+    define('FV_PLUGIN_VERSION', '4.2.7');
 
 
 
@@ -35,10 +35,6 @@ add_action( 'rest_api_init', function() {
         'callback'          => 'fv_custom_endpoint_create_auto',
         'args'              => [
             'license_key' => [
-                'required' => true,
-                'type'     => 'string',
-            ],
-            'data_id'     => [
                 'required' => true,
                 'type'     => 'string',
             ],
@@ -4245,8 +4241,6 @@ if(isset($_POST) && !empty($_POST['fv_admin_notice']) && $_POST['fv_admin_notice
 
 
 if(isset($_POST) && !empty($_POST['autpupdatestatus_form']) && $_POST['autpupdatestatus_form']){
-
-
 
 
 	$_ls_domain_sp_id_vf ='';

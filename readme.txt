@@ -111,3 +111,6 @@ Bug fixed
 
 --4.2.6--
 Bug fixed
+
+--4.2.7--
+Bug fixed
